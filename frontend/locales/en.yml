@@ -3,3 +3,6 @@ en:
     AccValuationRequiredReport: Accessions - Valuations Required
     AccValuationCompletedReport: Accessions - Valuations Completed
     WorkPlanDevelopmentReport: Accessions - Work Plan Development
+    parameters:
+      processing_status: Processing Status
+      processing_priority: Processing Priority
