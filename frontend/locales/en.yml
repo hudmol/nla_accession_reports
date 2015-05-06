@@ -1,3 +1,5 @@
 en:
   reports:
-    ValuationsRequiredAccessionReport: Accessions - Valuations Required
+    AccValuationRequiredReport: Accessions - Valuations Required
+    AccValuationCompletedReport: Accessions - Valuations Completed
+    WorkPlanDevelopmentReport: Accessions - Work Plan Development

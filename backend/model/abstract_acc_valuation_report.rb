@@ -1,23 +1,14 @@
-class ValuationsRequiredAccessionReport < AbstractReport
-
-  register_report({
-                    :uri_suffix => "nla_valuations_required",
-                    :description => "Report on accessions where valuations are required"
-                  })
-
-  def title
-    "Accessions - Valuations Required"
-  end
+class AbstractAccValuationReport < AbstractReport
 
   def headers
-    ['Identifier', 'Title', 'Arrival date', 'Extent', "Description", "Inventory", "Acq method", "Processing note"]
+    ['Identifier', 'Title', 'Arrival Date', 'Extent', "Description", "Inventory", "Acq Method", "Processing Note"]
   end
 
   def processor
     {
       'Identifier' => proc {|record| ASUtils.json_parse(record[:identifier] || "[]").compact.join("-")},
       'Title' => proc{|record| record[:title]},
-      'Arrival date' => proc{|record| record[:accession_date]},
+      'Arrival Date' => proc{|record| record[:accession_date]},
       'Extent' => proc{|record|
         if record[:extent_number]
           "#{record[:extent_number]} #{I18n.t("enumerations.extent_extent_type.#{record[:extent_type]}", :default => record[:extent_type])}"
@@ -27,8 +18,8 @@ class ValuationsRequiredAccessionReport < AbstractReport
       },
       'Description' => proc{|record| record[:content_description]},
       'Inventory' => proc{|record| record[:inventory]},
-      'Acq method' => proc{|record| I18n.t("enumerations.accession_acquisition_type.#{record[:acquisition_type]}", :default => record[:acquisition_type])},
-      'Processing note' => proc{|record| record[:cataloged_note]},
+      'Acq Method' => proc{|record| I18n.t("enumerations.accession_acquisition_type.#{record[:acquisition_type]}", :default => record[:acquisition_type])},
+      'Processing Note' => proc{|record| record[:cataloged_note]},
     }
   end
 
@@ -103,9 +94,6 @@ class ValuationsRequiredAccessionReport < AbstractReport
 
     dataset = dataset.where(Sequel.qualify(:accession, :repo_id) => @repo_id) if @repo_id
 
-    dataset.from_self(:alias => :all_results).
-      filter(Sequel.qualify(:all_results, :valuation_status) => 'required').
-      distinct(:id).
-      order_by(Sequel.asc(:identifier), Sequel.asc(:title))
+    dataset.distinct(:id).order_by(Sequel.asc(:identifier), Sequel.asc(:title))
   end
 end
