@@ -5,6 +5,10 @@ class AccValuationRequiredReport < AbstractAccValuationReport
                     :description => "Report on accessions where valuations are required"
                   })
 
+
+  VALUATION_STATUS_REQUIRED = 'Valuation Required'
+
+
   def title
     "Accessions - Valuation Required"
   end
@@ -12,6 +16,6 @@ class AccValuationRequiredReport < AbstractAccValuationReport
   def query(db)
     dataset = super
 
-    dataset.where(Sequel.qualify(:enumvals_valuation_status, :value) => 'required')
+    dataset.where(Sequel.qualify(:enumvals_valuation_status, :value) => VALUATION_STATUS_REQUIRED)
   end
 end

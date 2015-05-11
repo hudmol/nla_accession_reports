@@ -48,7 +48,13 @@ class WorkPlanDevelopmentReport < AbstractReport
         end
       },
       'Inventory' => proc{|record| record[:inventory]},
-      'Acq Method' => proc{|record| I18n.t("enumerations.accession_acquisition_type.#{record[:acquisition_type]}", :default => record[:acquisition_type])},
+      'Acq Method' => proc{|record|
+        if record[:acquisition_type]
+          I18n.t("enumerations.accession_acquisition_type.#{record[:acquisition_type]}", :default => record[:acquisition_type])
+        else
+          ""
+        end
+      },
       'Processing Plan' => proc{|record| record[:processing_plan]},
       'Accessioning Priority' => proc{|record| record[:processing_priority]},
     }
