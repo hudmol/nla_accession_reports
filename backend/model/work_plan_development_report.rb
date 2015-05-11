@@ -5,26 +5,19 @@ class WorkPlanDevelopmentReport < AbstractReport
                     :description => "Work Plan Development Report",
                     :params => [
                       ["processing_status", String, "Processing Status", {
-                        optional: true,
+                        optional: false,
                         validation: [
                           "Must be one of #{BackendEnumSource.values_for("collection_management_processing_status").join(", ")}",
-                          ->(v){ v.nil? || v == "" || BackendEnumSource.valid?("collection_management_processing_status", v) }
-                        ]
-                      }],
-                      ["processing_priority", String, "Processing Priority", {
-                        optional: true,
-                        validation: [
-                          "Must be one of #{BackendEnumSource.values_for("collection_management_processing_priority").join(", ")}",
-                          ->(v){ v.nil? || v == "" || BackendEnumSource.valid?("collection_management_processing_priority", v) }
-                        ]
-                      }],
+                          ->(v){ BackendEnumSource.valid?("collection_management_processing_status", v) }
+                        ],
+                        :enumeration => "collection_management_processing_status"
+                      }]
                     ]
                   })
 
   def initialize(params)
     super
     @processing_status = params[:processing_status] != "" ? params[:processing_status] : nil
-    @processing_priority = params[:processing_priority] != "" ?  params[:processing_priority] : nil
   end
 
   def title
@@ -32,7 +25,7 @@ class WorkPlanDevelopmentReport < AbstractReport
   end
 
   def headers
-    ['Accession No', 'Title', 'Arrival Date', 'Extent', "Inventory", "Acq Method", "Processing Plan", "Accessioning Priority"]
+    ['Accession No', 'Title', 'Arrival Date', 'Extent', "Inventory", "Acq Method", "Processing Plan", "Processing Notes", "Accessioning Priority", "Valuation Status"]
   end
 
   def processor
@@ -56,7 +49,15 @@ class WorkPlanDevelopmentReport < AbstractReport
         end
       },
       'Processing Plan' => proc{|record| record[:processing_plan]},
-      'Accessioning Priority' => proc{|record| record[:processing_priority]},
+      'Processing Notes' => proc{|record| record[:processing_notes]},
+      'Accessioning Priority' => proc{|record|
+        if record[:accessioning_priority]
+          I18n.t("enumerations.collection_management_processing_priority.#{record[:accessioning_priority]}", :default => record[:accessioning_priority])
+        else
+          ""
+        end
+      },
+      'Valuation Status' => proc{|record| record[:valuation_status]}
     }
   end
 
@@ -98,6 +99,13 @@ class WorkPlanDevelopmentReport < AbstractReport
            {
              :table_alias => :enum_processing_priority
            }).
+      join(:enumeration,
+           {
+             :name => 'user_defined_enum_1'
+           },
+           {
+             :table_alias => :enum_valuation_status
+           }).
       left_outer_join(:enumeration_value,
                       {
                         Sequel.qualify(:enumvals_acquisition_type, :enumeration_id) =>  Sequel.qualify(:enum_acquisition_type, :id),
@@ -130,6 +138,14 @@ class WorkPlanDevelopmentReport < AbstractReport
                       {
                         :table_alias => :enumvals_processing_priority
                       }).
+      left_outer_join(:enumeration_value,
+                      {
+                        Sequel.qualify(:enumvals_valuation_status, :enumeration_id) =>  Sequel.qualify(:enum_valuation_status, :id),
+                        Sequel.qualify(:user_defined, :enum_1_id) => Sequel.qualify(:enumvals_valuation_status, :id),
+                      },
+                      {
+                        :table_alias => :enumvals_valuation_status
+                      }).
       select(
       Sequel.qualify(:accession, :id),
       Sequel.qualify(:accession, :identifier),
@@ -137,18 +153,19 @@ class WorkPlanDevelopmentReport < AbstractReport
       Sequel.qualify(:accession, :content_description),
       Sequel.qualify(:accession, :inventory),
       Sequel.qualify(:accession, :accession_date),
+      Sequel.qualify(:accession, :retention_rule).as(:processing_notes),
       Sequel.qualify(:collection_management, :cataloged_note),
       Sequel.qualify(:enumvals_acquisition_type, :value).as(:acquisition_type),
       Sequel.qualify(:extent, :number).as(:extent_number),
       Sequel.qualify(:enumvals_extent_type, :value).as(:extent_type),
       Sequel.qualify(:collection_management, :processing_plan).as(:processing_plan),
       Sequel.qualify(:enumvals_processing_status, :value).as(:processing_status),
-      Sequel.qualify(:enumvals_processing_priority, :value).as(:processing_priority),
+      Sequel.qualify(:enumvals_processing_priority, :value).as(:accessioning_priority),
+      Sequel.qualify(:enumvals_valuation_status, :value).as(:valuation_status),
     )
 
     dataset = dataset.where(Sequel.qualify(:accession, :repo_id) => @repo_id) if @repo_id
     dataset = dataset.where(Sequel.qualify(:enumvals_processing_status, :value) => @processing_status) if @processing_status
-    dataset = dataset.where(Sequel.qualify(:enumvals_processing_priority, :value) => @processing_priority) if @processing_priority
 
     dataset.distinct(:id).order_by(Sequel.asc(:identifier), Sequel.asc(:title))
   end
