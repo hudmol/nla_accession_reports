@@ -25,7 +25,7 @@ class WorkPlanDevelopmentReport < AbstractReport
   end
 
   def headers
-    ['Accession No', 'Title', 'Arrival Date', 'Extent', "Inventory", "Acq Method", "Processing Plan", "Processing Notes", "Accessioning Priority", "Valuation Status"]
+    ['Accession No', 'Title', 'Arrival Date', 'Extent', "Container Summary", "Inventory", "Acq Method", "Processing Status", "Processing Plan", "Processing Notes", "Processors", "Accessioning Priority", "Valuation Status"]
   end
 
   def processor
@@ -40,6 +40,7 @@ class WorkPlanDevelopmentReport < AbstractReport
           ""
         end
       },
+      'Container Summary' => proc{|record| record[:extent_container_summary] || ""},
       'Inventory' => proc{|record| record[:inventory]},
       'Acq Method' => proc{|record|
         if record[:acquisition_type]
@@ -48,8 +49,10 @@ class WorkPlanDevelopmentReport < AbstractReport
           ""
         end
       },
+      'Processing Status' => proc{|record| I18n.t("enumerations.collection_management_processing_status.#{@processing_status}", :default => @processing_status)},
       'Processing Plan' => proc{|record| record[:processing_plan]},
       'Processing Notes' => proc{|record| record[:processing_notes]},
+      'Processors' => proc{|record| record[:processors]},
       'Accessioning Priority' => proc{|record|
         if record[:accessioning_priority]
           I18n.t("enumerations.collection_management_processing_priority.#{record[:accessioning_priority]}", :default => record[:accessioning_priority])
@@ -157,8 +160,10 @@ class WorkPlanDevelopmentReport < AbstractReport
       Sequel.qualify(:collection_management, :cataloged_note),
       Sequel.qualify(:enumvals_acquisition_type, :value).as(:acquisition_type),
       Sequel.qualify(:extent, :number).as(:extent_number),
+      Sequel.qualify(:extent, :container_summary).as(:extent_container_summary),
       Sequel.qualify(:enumvals_extent_type, :value).as(:extent_type),
       Sequel.qualify(:collection_management, :processing_plan).as(:processing_plan),
+      Sequel.qualify(:collection_management, :processors).as(:processors),
       Sequel.qualify(:enumvals_processing_status, :value).as(:processing_status),
       Sequel.qualify(:enumvals_processing_priority, :value).as(:accessioning_priority),
       Sequel.qualify(:enumvals_valuation_status, :value).as(:valuation_status),
