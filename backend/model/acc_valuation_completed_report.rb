@@ -2,15 +2,15 @@ class AccValuationCompletedReport < AbstractAccValuationReport
 
   register_report({
                     :uri_suffix => "nla_valuation_completed",
-                    :description => "Report on accessions where valuations are completed"
+                    :description => "Report on accessions where valuations have completed"
                   })
 
 
-  VALUATION_STATUS_COMPLETED = 'Valuation Completed'
+  VALUATION_STATUS_COMPLETED = 'Valuation Complete'
 
 
   def title
-    "Accessions - Valuation Completed"
+    "Accessions - Valuation Complete"
   end
 
   def headers

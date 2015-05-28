@@ -1,7 +1,7 @@
 en:
   reports:
     AccValuationRequiredReport: Accessions - Valuations Required
-    AccValuationCompletedReport: Accessions - Valuations Completed
+    AccValuationCompletedReport: Accessions - Valuations Complete
     WorkPlanDevelopmentReport: Accessions - Work Plan Development
     parameters:
       processing_status: Processing Status
