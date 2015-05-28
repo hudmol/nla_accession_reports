@@ -1,7 +1,7 @@
 class AbstractAccValuationReport < AbstractReport
 
   def headers
-    ['Identifier', 'Title', 'Arrival Date', 'Extent', "Container Summary", "Description", "Inventory", "Acq Method", "Processing Notes", "Valuation Notes"]
+    ['Identifier', 'Title', 'Arrival Date', 'Extent', "Container Summary", "Description", "Inventory", "Acq Method", "Processing Notes", "Valuer(s)", "Valuation Notes"]
   end
 
   def processor
@@ -21,7 +21,8 @@ class AbstractAccValuationReport < AbstractReport
       'Inventory' => proc{|record| record[:inventory]},
       'Acq Method' => proc{|record| I18n.t("enumerations.accession_acquisition_type.#{record[:acquisition_type]}", :default => record[:acquisition_type])},
       'Processing Notes' => proc{|record| record[:processing_notes]},
-      'Valuation Notes' => proc{|record| record[:valuation_notes]}
+      'Valuation Notes' => proc{|record| record[:valuation_notes]},
+      'Valuer(s)' => proc{|record| record[:valuer_names]}
     }
   end
 
@@ -95,6 +96,7 @@ class AbstractAccValuationReport < AbstractReport
         Sequel.qualify(:user_defined, :text_1).as(:valuation_notes),
         Sequel.qualify(:user_defined, :date_1).as(:valuation_completed_date),
         Sequel.qualify(:user_defined, :real_3).as(:valuation_final_amount),
+        Sequel.qualify(:user_defined, :string_1).as(:valuer_names),
         Sequel.qualify(:enumvals_extent_type, :value).as(:extent_type)
       )
 
