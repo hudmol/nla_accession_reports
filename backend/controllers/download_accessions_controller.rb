@@ -21,7 +21,7 @@ class ArchivesSpaceService < Sinatra::Base
 
 
   def some_headers
-    {"Content-Type" => "text/plain; charset=UTF-8", "Content-Disposition" => "attachment; filename=\"accessions_#{Time.now.iso8601}.csv\""}
+    {"Content-Type" => "text/csv; charset=UTF-8", "Content-Disposition" => "attachment; filename=\"accessions_#{Time.now.iso8601}.csv\""}
   end
 
 
