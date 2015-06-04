@@ -2,7 +2,7 @@ require 'csv'
 
 class ArchivesSpaceService < Sinatra::Base
 
-  Endpoint.post('/repositories/:repo_id/download_accessions')
+  Endpoint.get('/repositories/:repo_id/download_accessions')
     .description("Download Accessions as CSV")
     .params(["q", String, "A search query string",
              :optional => true],
@@ -11,7 +11,7 @@ class ArchivesSpaceService < Sinatra::Base
             ["filter_term", [String], "A json string containing the term/value pairs to be applied as filters.  Of the form: {\"fieldname\": \"fieldvalue\"}.",
              :optional => true],
             ["repo_id", :repo_id])
-    .permissions([:view_repository])
+    .permissions([])
     .returns([200, ""]) \
   do
 
