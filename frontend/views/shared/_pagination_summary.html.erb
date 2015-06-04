@@ -44,15 +44,15 @@
   <div class="pull-right" style="position: relative">
 
     <%# PLUGIN CONTENT STARTS HERE %>
-    <% if params['controller'] == 'accessions' || (Array(params['filter_term']).any? { |t| t.match('accession') } && !params['advanced']) %>
+    <% if params['controller'] == 'accessions' || Array(params['filter_term']).any? { |t| t.match('accession') } %>
       <span class="btn-group">
         <%= link_to "Download as CSV",
           {
            :controller => :download_accessions,
            :action => :download,
-           :filter_term => params['filter_term'],
-           :q => params['q'],
-           :aq => params['aq']
+           :filter_term => @search_data[:criteria]['filter_term[]'],
+           :q => @search_data[:criteria]['q'],
+           :aq => @search_data[:criteria]['aq']
           },
           :method => :post,
           :class => "btn btn-sm btn-default"
