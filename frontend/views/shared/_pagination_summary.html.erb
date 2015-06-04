@@ -1,6 +1,26 @@
 <% if @search_data %>
   <div class="pull-left">
     <%= I18n.t "pagination.summary_prefix" %> <strong><%= @search_data["offset_first"] %></strong> <%= I18n.t "pagination.summary_offset_connector" %> <strong><%= @search_data["offset_last"] %></strong> <%= I18n.t "pagination.summary_total_connector" %> <strong><%= @search_data["total_hits"] %></strong> <%= I18n.t "pagination.summary_suffix" %>
+
+    <%# PLUGIN CONTENT STARTS HERE %>
+    <% if params['controller'] == 'accessions' || Array(params['filter_term']).any? { |t| t.match('accession') } %>
+      &nbsp;
+      <span class="btn-group">
+        <%= link_to I18n.t("download_accessions.button_label"),
+          {
+           :controller => :download_accessions,
+           :action => :download,
+           :filter_term => @search_data[:criteria]['filter_term[]'],
+           :q => @search_data[:criteria]['q'],
+           :aq => @search_data[:criteria]['aq']
+          },
+          :method => :post,
+          :class => "btn btn-xs btn-default"
+        %>
+      </span>
+    <% end %>
+    <%# PLUGIN CONTENT ENDS HERE %>
+
   </div>
   <% if @search_data.sorted? %>
     <div class="pull-right" style="position: relative">
@@ -42,25 +62,6 @@
   <% end %>
 
   <div class="pull-right" style="position: relative">
-
-    <%# PLUGIN CONTENT STARTS HERE %>
-    <% if params['controller'] == 'accessions' || Array(params['filter_term']).any? { |t| t.match('accession') } %>
-      <span class="btn-group">
-        <%= link_to "Download as CSV",
-          {
-           :controller => :download_accessions,
-           :action => :download,
-           :filter_term => @search_data[:criteria]['filter_term[]'],
-           :q => @search_data[:criteria]['q'],
-           :aq => @search_data[:criteria]['aq']
-          },
-          :method => :post,
-          :class => "btn btn-sm btn-default"
-        %>
-      </span>
-    <% end %>
-    <%# PLUGIN CONTENT ENDS HERE %>
-
     <span class="btn-group">
       <label style="float: left;"><%= I18n.t("search_sorting.sort_by") %>&#160;</label>
       <a class="dropdown-toggle" data-toggle="dropdown" href="#">
