@@ -4,12 +4,7 @@ class ArchivesSpaceService < Sinatra::Base
 
   Endpoint.get('/repositories/:repo_id/download_accessions')
     .description("Download Accessions as CSV")
-    .params(["q", String, "A search query string",
-             :optional => true],
-            ["aq", JSONModel(:advanced_query), "A json string containing the advanced query",
-             :optional => true],
-            ["filter_term", [String], "A json string containing the term/value pairs to be applied as filters.  Of the form: {\"fieldname\": \"fieldvalue\"}.",
-             :optional => true],
+    .params(*BASE_SEARCH_PARAMS,
             ["repo_id", :repo_id])
     .permissions([])
     .returns([200, ""]) \

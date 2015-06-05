@@ -3,11 +3,7 @@ class DownloadAccessionsController < ApplicationController
   set_access_control  "view_repository" => [:download]
 
   def download
-    download_params = {}
-    if params['filter_term']
-      download_params['filter_term[]'] = Array(params['filter_term'])
-    end
-    ['q', 'aq'].each{|p| download_params[p] = params[p] if params[p]}
+    download_params = params_for_backend_search.merge('aq' => params['aq'])
 
     queue = Queue.new
 

@@ -7,13 +7,9 @@
       &nbsp;
       <span class="btn-group">
         <%= link_to I18n.t("download_accessions.button_label"),
-          {
-           :controller => :download_accessions,
-           :action => :download,
-           :filter_term => @search_data[:criteria]['filter_term[]'],
-           :q => @search_data[:criteria]['q'],
-           :aq => @search_data[:criteria]['aq']
-          },
+          build_search_params.merge({:aq => @search_data[:criteria]['aq'],
+                                     :controller => :download_accessions,
+                                     :action => :download}),
           :method => :post,
           :class => "btn btn-xs btn-default"
         %>
