@@ -6,3 +6,5 @@ en:
     parameters:
       processing_status: Processing Status
       processing_priority: Processing Priority
+  download_accessions:
+    button_label: Download as CSV
