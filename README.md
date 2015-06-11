@@ -1,10 +1,13 @@
 NLA Accession Reports plugin
 ============================
 
-Introduce extra Accession reports, including:
+Introduces extra Accession reports, including:
  - Valuations Required
  - Valuations Completed
  - Workplan Development
+
+And adds a 'Download as CSV' button to Accession browse and search screens.
+
 
 ## Installing it
 
