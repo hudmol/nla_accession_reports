@@ -38,6 +38,7 @@ class ArchivesSpaceService < Sinatra::Base
         resp['results'].each do |r|
           j = ASUtils.json_parse(r['json'])
           ud = j['user_defined'] || {}
+          cm = j['collection_management'] || {}
           extent = j['extents'].first || {}
           csv << [
                   r['title'],
@@ -56,6 +57,8 @@ class ArchivesSpaceService < Sinatra::Base
                   ud['text_3'],
                   ud['text_4'],
                   ud['enum_2'],
+                  ud['integer_1'],
+                  cm['processing_status'],
                  ]
         end
 
@@ -75,7 +78,8 @@ class ArchivesSpaceService < Sinatra::Base
      'Inventory', 'Retention Rule', 'Access Restrictions Note',
      'Dates', 'Extent Number', 'Extent Type', 'Extent Container Summary',
      'Subjects', 'Preservation Notes', 'Volunteers Projects',
-     'Special Format Notes', 'Preservation Status'
+     'Special Format Notes', 'Preservation Status',
+     'Processing (A&D) Priority', 'Processing Status',
     ]
   end
 
