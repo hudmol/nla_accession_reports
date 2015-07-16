@@ -157,7 +157,6 @@ class WorkPlanDevelopmentReport < AbstractReport
       Sequel.qualify(:accession, :inventory),
       Sequel.qualify(:accession, :accession_date),
       Sequel.qualify(:accession, :retention_rule).as(:processing_notes),
-      Sequel.qualify(:collection_management, :cataloged_note),
       Sequel.qualify(:enumvals_acquisition_type, :value).as(:acquisition_type),
       Sequel.qualify(:extent, :number).as(:extent_number),
       Sequel.qualify(:extent, :container_summary).as(:extent_container_summary),
