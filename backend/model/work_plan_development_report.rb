@@ -25,7 +25,10 @@ class WorkPlanDevelopmentReport < AbstractReport
   end
 
   def headers
-    ['Accession No', 'Title', 'Arrival Date', 'Extent', "Container Summary", "Inventory", "Acq Method", "Processing Status", "Processing Plan", "Processing Notes", "Processors", "Accessioning Priority", "Valuation Status"]
+    ['Accession No', 'Title', 'Arrival Date', 'Extent', "Container Summary", "Inventory", "Acq Method", 'Disposition',
+     "Processing Status", "Processing Plan", "Processing Notes", "Processors",
+     "Accessioning Priority", "Valuation Status", 'New Collection?', 'PO/Holdings Record', 'RefTracker No.',
+     'Digitisation Notes', 'Preservation Status']
   end
 
   def processor
@@ -49,6 +52,7 @@ class WorkPlanDevelopmentReport < AbstractReport
           ""
         end
       },
+      'Disposition' => proc{|record| record[:disposition]},
       'Processing Status' => proc{|record| I18n.t("enumerations.collection_management_processing_status.#{@processing_status}", :default => @processing_status)},
       'Processing Plan' => proc{|record| record[:processing_plan]},
       'Processing Notes' => proc{|record| record[:processing_notes]},
@@ -60,7 +64,12 @@ class WorkPlanDevelopmentReport < AbstractReport
           ""
         end
       },
-      'Valuation Status' => proc{|record| record[:valuation_status]}
+      'Valuation Status' => proc{|record| record[:valuation_status]},
+      'New Collection?' => proc{|record| record[:new_collection] == 1 ? 'Yes' : 'No'},
+      'PO/Holdings Record' => proc{|record| record[:po_holdings_record] == 1 ? 'Yes' : 'No'},
+      'RefTracker No.' => proc{|record| record[:reftracker_no]},
+      'Digitisation Notes' => proc{|record| record[:digitisation_notes]},
+      'Preservation Status' => proc{|record| record[:preservation_status]},
     }
   end
 
@@ -109,6 +118,13 @@ class WorkPlanDevelopmentReport < AbstractReport
            {
              :table_alias => :enum_valuation_status
            }).
+      join(:enumeration,
+           {
+             :name => 'user_defined_enum_2'
+           },
+           {
+             :table_alias => :enum_preservation_status
+           }).
       left_outer_join(:enumeration_value,
                       {
                         Sequel.qualify(:enumvals_acquisition_type, :enumeration_id) =>  Sequel.qualify(:enum_acquisition_type, :id),
@@ -149,6 +165,14 @@ class WorkPlanDevelopmentReport < AbstractReport
                       {
                         :table_alias => :enumvals_valuation_status
                       }).
+      left_outer_join(:enumeration_value,
+                      {
+                        Sequel.qualify(:enumvals_preservation_status, :enumeration_id) =>  Sequel.qualify(:enum_preservation_status, :id),
+                        Sequel.qualify(:user_defined, :enum_2_id) => Sequel.qualify(:enumvals_preservation_status, :id),
+                      },
+                      {
+                        :table_alias => :enumvals_preservation_status
+                      }).
       select(
       Sequel.qualify(:accession, :id),
       Sequel.qualify(:accession, :identifier),
@@ -156,6 +180,7 @@ class WorkPlanDevelopmentReport < AbstractReport
       Sequel.qualify(:accession, :content_description),
       Sequel.qualify(:accession, :inventory),
       Sequel.qualify(:accession, :accession_date),
+      Sequel.qualify(:accession, :disposition),
       Sequel.qualify(:accession, :retention_rule).as(:processing_notes),
       Sequel.qualify(:enumvals_acquisition_type, :value).as(:acquisition_type),
       Sequel.qualify(:extent, :number).as(:extent_number),
@@ -166,6 +191,11 @@ class WorkPlanDevelopmentReport < AbstractReport
       Sequel.qualify(:enumvals_processing_status, :value).as(:processing_status),
       Sequel.qualify(:enumvals_processing_priority, :value).as(:accessioning_priority),
       Sequel.qualify(:enumvals_valuation_status, :value).as(:valuation_status),
+      Sequel.qualify(:user_defined, :boolean_1).as(:new_collection),
+      Sequel.qualify(:user_defined, :boolean_2).as(:po_holdings_record),
+      Sequel.qualify(:user_defined, :string_2).as(:reftracker_no),
+      Sequel.qualify(:user_defined, :text_5).as(:digitisation_notes),
+      Sequel.qualify(:enumvals_preservation_status, :value).as(:preservation_status),
     )
 
     dataset = dataset.where(Sequel.qualify(:accession, :repo_id) => @repo_id) if @repo_id
