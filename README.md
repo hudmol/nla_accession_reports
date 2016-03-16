@@ -14,7 +14,7 @@ And adds a 'Download as CSV' button to Accession browse and search screens.
 To install, just activate the plugin in your config/config.rb file by
 including an entry such as:
 
-     # If you have other plugins loaded, just add 'component_report' to
+     # If you have other plugins loaded, just add 'nla_accession_reports' to
      # the list
      AppConfig[:plugins] = ['local', 'other_plugins', 'nla_accession_reports']
 
