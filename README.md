@@ -24,6 +24,3 @@ ArchivesSpace plugins directory.  For example:
      cd /path/to/your/archivesspace/plugins
      git clone https://github.com/hudmol/nla_accession_reports.git nla_accession_reports
 
-## Temporary Frontend template override
-
-To fix a bug on the Report's listing page, this plugin overrides the `frontend/views/reports/index.html.erb` template to allow reports to define a single parameter and for it to be displayed correctly.  A patch has been delivered upstream via a pull request (https://github.com/archivesspace/archivesspace/pull/201).  Once that patch makes it into a future release, this particular template override may be removed.
