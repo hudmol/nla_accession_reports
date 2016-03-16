@@ -7,10 +7,10 @@ class WorkPlanDevelopmentReport < AbstractReport
                       ["processing_status", String, "Processing Status", {
                         optional: false,
                         validation: [
-                          "Must be one of #{BackendEnumSource.values_for("collection_management_processing_status").join(", ")}",
-                          ->(v){ BackendEnumSource.valid?("collection_management_processing_status", v) }
+                          "Must be one of #{BackendEnumSource.values_for("event_outcome").join(", ")}",
+                          ->(v){ BackendEnumSource.valid?("event_outcome", v) }
                         ],
-                        :enumeration => "collection_management_processing_status"
+                        :enumeration => "event_outcome"
                       }]
                     ]
                   })
@@ -26,7 +26,7 @@ class WorkPlanDevelopmentReport < AbstractReport
 
   def headers
     ['Accession No', 'Title', 'Arrival Date', 'Extent', "Container Summary", "Inventory", "Acq Method", 'Disposition',
-     "Processing Status", "Processing Plan", "Processing Notes", "Processors",
+     "Processing Plan", "Processing Notes", "Processors",
      "Accessioning Priority", "Valuation Status", 'New Collection?', 'PO/Holdings Record', 'RefTracker No.',
      'Digitisation Notes', 'Preservation Status',
      'Processed Event Outcome', 'Catalogued Event Outcome', 'Accession Event Outcome', 'Registration Event Outcome',
@@ -56,7 +56,6 @@ class WorkPlanDevelopmentReport < AbstractReport
         end
       },
       'Disposition' => proc{|record| record[:disposition]},
-      'Processing Status' => proc{|record| I18n.t("enumerations.collection_management_processing_status.#{@processing_status}", :default => @processing_status)},
       'Processing Plan' => proc{|record| record[:processing_plan]},
       'Processing Notes' => proc{|record| record[:processing_notes]},
       'Processors' => proc{|record| record[:processors]},
@@ -199,13 +198,6 @@ class WorkPlanDevelopmentReport < AbstractReport
            }).
       join(:enumeration,
            {
-             :name => 'collection_management_processing_status'
-           },
-           {
-             :table_alias => :enum_processing_status
-           }).
-      join(:enumeration,
-           {
              :name => 'collection_management_processing_priority'
            },
            {
@@ -247,14 +239,6 @@ class WorkPlanDevelopmentReport < AbstractReport
                       },
                       {
                         :table_alias => :enumvals_extent_type
-                      }).
-      left_outer_join(:enumeration_value,
-                      {
-                        Sequel.qualify(:enumvals_processing_status, :enumeration_id) =>  Sequel.qualify(:enum_processing_status, :id),
-                        Sequel.qualify(:collection_management, :processing_status_id) => Sequel.qualify(:enumvals_processing_status, :id),
-                      },
-                      {
-                        :table_alias => :enumvals_processing_status
                       }).
       left_outer_join(:enumeration_value,
                       {
@@ -369,7 +353,6 @@ class WorkPlanDevelopmentReport < AbstractReport
       Sequel.qualify(:enumvals_extent_type, :value).as(:extent_type),
       Sequel.qualify(:collection_management, :processing_plan).as(:processing_plan),
       Sequel.qualify(:collection_management, :processors).as(:processors),
-      Sequel.qualify(:enumvals_processing_status, :value).as(:processing_status),
       Sequel.qualify(:enumvals_processing_priority, :value).as(:accessioning_priority),
       Sequel.qualify(:enumvals_valuation_status, :value).as(:valuation_status),
       Sequel.qualify(:user_defined, :boolean_1).as(:new_collection),
@@ -389,7 +372,7 @@ class WorkPlanDevelopmentReport < AbstractReport
     )
 
     dataset = dataset.where(Sequel.qualify(:accession, :repo_id) => @repo_id) if @repo_id
-    dataset = dataset.where(Sequel.qualify(:enumvals_processing_status, :value) => @processing_status) if @processing_status
+    dataset = dataset.where(Sequel.qualify(:enumvals_event_processed_outcome, :value) => @processing_status) if @processing_status
 
     dataset.distinct(:id).order_by(Sequel.asc(:identifier), Sequel.asc(:title))
   end
