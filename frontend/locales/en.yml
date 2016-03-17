@@ -4,7 +4,7 @@ en:
     AccValuationCompletedReport: Accessions - Valuations Complete
     WorkPlanDevelopmentReport: Accessions - Work Plan Development
     parameters:
-      processing_status: Processing Status
+      processing_status: Work Plan Status
       processing_priority: Processing Priority
   download_accessions:
     button_label: Download as CSV

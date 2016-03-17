@@ -4,7 +4,7 @@ class WorkPlanDevelopmentReport < AbstractReport
                     :uri_suffix => "nla_work_plan_development",
                     :description => "Work Plan Development Report",
                     :params => [
-                      ["processing_status", String, "Processing Status", {
+                      ["processing_status", String, "Work Plan Status", {
                         optional: false,
                         validation: [
                           "Must be one of #{BackendEnumSource.values_for("event_outcome").join(", ")}",
