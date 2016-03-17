@@ -36,7 +36,6 @@ class ArchivesSpaceService < Sinatra::Base
         resp = Search.search(params, params[:repo_id])
 
         resp['results'].each do |r|
-          puts "RRRRRRRRRRRR #{r.inspect}"
           j = ASUtils.json_parse(r['json'])
           ud = j['user_defined'] || {}
           cm = j['collection_management'] || {}
