@@ -48,17 +48,26 @@ class ArchivesSpaceService < Sinatra::Base
                   j['inventory'],
                   j['retention_rule'],
                   j['access_restrictions_note'],
+                  j['disposition'],
+                  j['acquisition_type'],
                   format_dates(j['dates']),
                   extent['number'],
                   extent['extent_type'],
                   extent['container_summary'],
+                  extent['physical_details'],
+                  extent['Dimensions'],
                   format_subjects(r['subjects']),
                   ud['text_2'],
                   ud['text_3'],
                   ud['text_4'],
                   ud['enum_2'],
                   ud['integer_1'],
+                  ud['boolean_1'],
+                  ud['boolean_2'],
+                  ud['integer_2'],
+                  ud['string_2'],
                   cm['processing_status'],
+                  cm['processing_priority'],
                  ]
         end
 
@@ -75,11 +84,16 @@ class ArchivesSpaceService < Sinatra::Base
   def column_headings
     [
      'Title', 'Identifier', 'Accession Date', 'Content Description',
-     'Inventory', 'Retention Rule', 'Access Restrictions Note',
+     'Inventory', 'Processing Note', 'Access Restrictions Note',
+     'Disposition', 'Acquisition Type',
      'Dates', 'Extent Number', 'Extent Type', 'Extent Container Summary',
+     'Physical Details', 'Dimensions',
      'Subjects', 'Preservation Notes', 'Volunteers Projects',
      'Special Format Notes', 'Preservation Status',
-     'Processing (A&D) Priority', 'Processing Status',
+     'Processing (A&D) Priority',
+     'New Collection?', 'Purchase Order / Holding?',
+     'Voyager Bib ID', 'RefTracker No.',
+     'Processing Status', 'Processing Priority',
     ]
   end
 
