@@ -36,10 +36,12 @@ class ArchivesSpaceService < Sinatra::Base
         resp = Search.search(params, params[:repo_id])
 
         resp['results'].each do |r|
+          puts "RRRRRRRRRRRR #{r.inspect}"
           j = ASUtils.json_parse(r['json'])
           ud = j['user_defined'] || {}
           cm = j['collection_management'] || {}
-          extent = j['extents'].first || {}
+          extent1 = j['extents'][0] || {}
+          extent2 = j['extents'][1] || {}
           csv << [
                   r['title'],
                   r['identifier'],
@@ -51,11 +53,16 @@ class ArchivesSpaceService < Sinatra::Base
                   j['disposition'],
                   j['acquisition_type'],
                   format_dates(j['dates']),
-                  extent['number'],
-                  extent['extent_type'],
-                  extent['container_summary'],
-                  extent['physical_details'],
-                  extent['Dimensions'],
+                  extent1['number'],
+                  extent1['extent_type'],
+                  extent1['container_summary'],
+                  extent1['physical_details'],
+                  extent1['dimensions'],
+                  extent2['number'],
+                  extent2['extent_type'],
+                  extent2['container_summary'],
+                  extent2['physical_details'],
+                  extent2['dimensions'],
                   format_subjects(r['subjects']),
                   ud['text_2'],
                   ud['text_3'],
@@ -68,6 +75,15 @@ class ArchivesSpaceService < Sinatra::Base
                   ud['string_2'],
                   cm['processing_status'],
                   cm['processing_priority'],
+                  r['event_registration_u_sstr'] ? r['event_registration_u_sstr'][0] : "",
+                  r['event_accession_u_sstr'] ? r['event_accession_u_sstr'][0] : "",
+                  r['event_acknowledgement_sent_u_sstr'] ? r['event_acknowledgement_sent_u_sstr'][0] : "",
+                  r['event_agreement_sent_u_sstr'] ? r['event_agreement_sent_u_sstr'][0] : "",
+                  r['event_agreement_signed_u_sstr'] ? r['event_agreement_signed_u_sstr'][0] : "",
+                  r['event_cataloged_u_sstr'] ? r['event_cataloged_u_sstr'][0] : "",
+                  r['event_processed_u_sstr'] ? r['event_processed_u_sstr'][0] : "",
+                  r['event_publication_u_sstr'] ? r['event_publication_u_sstr'][0] : "",
+                  r['event_ingestion_u_sstr'] ? r['event_ingestion_u_sstr'][0] : "",
                  ]
         end
 
@@ -85,15 +101,19 @@ class ArchivesSpaceService < Sinatra::Base
     [
      'Title', 'Identifier', 'Accession Date', 'Content Description',
      'Inventory', 'Processing Note', 'Access Restrictions Note',
-     'Disposition', 'Acquisition Type',
-     'Dates', 'Extent Number', 'Extent Type', 'Extent Container Summary',
-     'Physical Details', 'Dimensions',
+     'Disposition', 'Acquisition Type', 'Dates',
+     'Extent 1 Number', 'Extent 1 Type', 'Extent 1 Container Summary',
+     'Extent 1 Physical Details', 'Extent 1 Dimensions',
+     'Extent 2 Number', 'Extent 2 Type', 'Extent 2 Container Summary',
+     'Extent 2 Physical Details', 'Extent 2 Dimensions',
      'Subjects', 'Preservation Notes', 'Volunteers Projects',
      'Special Format Notes', 'Preservation Status',
      'Processing (A&D) Priority',
      'New Collection?', 'Purchase Order / Holding?',
      'Voyager Bib ID', 'RefTracker No.',
      'Processing Status', 'Processing Priority',
+     'Registration', 'Accession', 'Acknowledgement Sent', 'Agreement Sent',
+     'Agreement Signed', 'Catalogued', 'Processed', 'Publication', 'Ingestion'
     ]
   end
 
