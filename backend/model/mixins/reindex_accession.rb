@@ -1,7 +1,7 @@
 module ReindexAccession
 
-  # don't need to worry about create
-  # because it is handled in the event link
+  # the delete case isn't handled by the core code
+  # this is likely a bug and should be investigated
 
   def delete
     accession = false
@@ -14,17 +14,6 @@ module ReindexAccession
     super
 
     accession.update(:system_mtime => Time.now) if accession
-  end
-
-
-  def update_from_json(json, opts = {}, apply_nested_records = true)
-    super
-
-    self.related_records(:event_link).each do |linked_record|
-      if linked_record.is_a? Accession
-        linked_record.update(:system_mtime => Time.now)
-      end
-    end
   end
 
 end
