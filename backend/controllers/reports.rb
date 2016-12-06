@@ -1,6 +1,6 @@
 class ArchivesSpaceService < Sinatra::Base
 
-  include ReportHelper::ResponseHelpers
+  include ReportHelper
 
   # Endpoint.get("/repositories/:repo_id/reports/nla_valuation_required")
   # .description("Report on accessions where valuations are required")
