@@ -17,7 +17,7 @@ class WorkPlanDevelopmentReport < AbstractReport
 
   def initialize(params, job)
     super
-    @processing_status = params[:processing_status] != "" ? params[:processing_status] : nil
+    @processing_status = params['processing_status'] != "" ? params['processing_status'] : nil
   end
 
   def title
