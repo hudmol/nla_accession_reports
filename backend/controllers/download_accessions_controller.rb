@@ -75,14 +75,23 @@ class ArchivesSpaceService < Sinatra::Base
                   cm['processing_status'],
                   cm['processing_priority'],
                   r['event_registration_u_sstr'] ? r['event_registration_u_sstr'][0] : "",
+                  r['event_registration_begin_u_sstr'] ? r['event_registration_begin_u_sstr'][0] : "",
                   r['event_accession_u_sstr'] ? r['event_accession_u_sstr'][0] : "",
+                  r['event_accession_begin_u_sstr'] ? r['event_accession_begin_u_sstr'][0] : "",
                   r['event_acknowledgement_sent_u_sstr'] ? r['event_acknowledgement_sent_u_sstr'][0] : "",
+                  r['event_acknowledgement_sent_begin_u_sstr'] ? r['event_acknowledgement_sent_begin_u_sstr'][0] : "",
                   r['event_agreement_sent_u_sstr'] ? r['event_agreement_sent_u_sstr'][0] : "",
+                  r['event_agreement_sent_begin_u_sstr'] ? r['event_agreement_sent_begin_u_sstr'][0] : "",
                   r['event_agreement_signed_u_sstr'] ? r['event_agreement_signed_u_sstr'][0] : "",
+                  r['event_agreement_signed_begin_u_sstr'] ? r['event_agreement_signed_begin_u_sstr'][0] : "",
                   r['event_cataloged_u_sstr'] ? r['event_cataloged_u_sstr'][0] : "",
+                  r['event_cataloged_begin_u_sstr'] ? r['event_cataloged_begin_u_sstr'][0] : "",
                   r['event_processed_u_sstr'] ? r['event_processed_u_sstr'][0] : "",
+                  r['event_processed_begin_u_sstr'] ? r['event_processed_begin_u_sstr'][0] : "",
                   r['event_publication_u_sstr'] ? r['event_publication_u_sstr'][0] : "",
+                  r['event_publication_begin_u_sstr'] ? r['event_publication_begin_u_sstr'][0] : "",
                   r['event_ingestion_u_sstr'] ? r['event_ingestion_u_sstr'][0] : "",
+                  r['event_ingestion_begin_u_sstr'] ? r['event_ingestion_begin_u_sstr'][0] : ""
                  ]
         end
 
@@ -111,8 +120,15 @@ class ArchivesSpaceService < Sinatra::Base
      'New Collection?', 'Purchase Order / Holding?',
      'Voyager Bib ID', 'RefTracker No.',
      'Processing Status', 'Processing Priority',
-     'Registration', 'Accession', 'Acknowledgement Sent', 'Agreement Sent',
-     'Agreement Signed', 'Catalogued', 'Processed', 'Publication', 'Ingestion'
+     'Registration', 'Registration Begin',
+     'Accession', 'Accession Begin',
+     'Acknowledgement Sent', 'Acknowledgement Sent Begin',
+     'Agreement Sent', 'Agreement Sent Begin',
+     'Agreement Signed', 'Agreement Signed Begin',
+     'Catalogued', 'Catalogued Begin',
+     'Processed', 'Processed Begin',
+     'Publication', 'Publication Begin',
+     'Ingestion', 'Ingestion Begin'
     ]
   end
 

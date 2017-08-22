@@ -7,6 +7,7 @@ class CommonIndexer
         ASUtils.wrap(record['record']['linked_events']).each{|linked_event|
           event = JSONModel::JSONModel(:event).find(JSONModel.parse_reference(linked_event['ref'])[:id])
           doc["event_#{event['event_type']}_u_sstr"] = event['outcome']
+          doc["event_#{event['event_type']}_begin_u_sstr"] = event['date']['begin']
         }
       end
     }
