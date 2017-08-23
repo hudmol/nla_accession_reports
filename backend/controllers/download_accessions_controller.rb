@@ -124,14 +124,14 @@ class ArchivesSpaceService < Sinatra::Base
      'Date Fully Acquired',
      'Processing Status', 'Processing Priority', 'Processing Plan',
      'Registration', 'Registration Begin',
-     'Accession', 'Accession Begin',
-     'Acknowledgement Sent', 'Acknowledgement Sent Begin',
-     'Agreement Sent', 'Agreement Sent Begin',
-     'Agreement Signed', 'Agreement Signed Begin',
-     'Catalogued', 'Catalogued Begin',
-     'Processed', 'Processed Begin',
-     'Publication', 'Publication Begin',
-     'Ingestion', 'Ingestion Begin'
+     'Accession Event', 'Accession Event Date',
+     'Acknowledgement Sent Event', 'Acknowledgement Sent Event Date',
+     'Agreement Sent Event', 'Agreement Sent Event Date',
+     'Agreement Signed Event', 'Agreement Signed Event Date',
+     'Catalogued Event', 'Catalogued Event Date',
+     'Processed Event', 'Processed Event Date',
+     'Publication Event', 'Publication Event Date',
+     'Ingestion Event', 'Ingestion Event Date'
     ]
   end
 
