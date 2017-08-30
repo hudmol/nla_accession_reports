@@ -1,10 +1,6 @@
 class AccValuationCompletedReport < AbstractAccValuationReport
 
-  register_report({
-                    :uri_suffix => "nla_valuation_completed",
-                    :description => "Report on accessions where valuations have completed"
-                  })
-
+  register_report
 
   VALUATION_STATUS_COMPLETED = 'Valuation Complete'
 
@@ -24,7 +20,7 @@ class AccValuationCompletedReport < AbstractAccValuationReport
     })
   end
 
-  def query(db)
+  def query
     dataset = super
 
 

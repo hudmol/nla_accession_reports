@@ -31,7 +31,7 @@ class AbstractAccValuationReport < AbstractReport
     dataset
   end
 
-  def query(db)
+  def query
     dataset = db[:accession].
       left_outer_join(:user_defined, :accession_id =>  Sequel.qualify(:accession, :id)).
       left_outer_join(:collection_management, :accession_id => Sequel.qualify(:accession, :id)).

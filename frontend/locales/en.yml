@@ -1,8 +1,14 @@
 en:
   reports:
-    AccValuationRequiredReport: Accessions - Valuations Required
-    AccValuationCompletedReport: Accessions - Valuations Complete
-    WorkPlanDevelopmentReport: Accessions - Work Plan Development
+    acc_valuation_required_report:
+      title: Accessions - Valuations Required
+      description: Report on accessions where valuations are required
+    acc_valuation_completed_report:
+      title: Accessions - Valuations Complete
+      description: Report on accessions where valuations have completed
+    work_plan_development_report:
+      title: Accessions - Work Plan Development
+      description: Work Plan Development Report
     parameters:
       processing_status: Work Plan Status
       processing_priority: Processing Priority

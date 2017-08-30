@@ -1,9 +1,6 @@
 class WorkPlanDevelopmentReport < AbstractReport
 
-  register_report({
-                    :uri_suffix => "nla_work_plan_development",
-                    :description => "Work Plan Development Report",
-                    :params => [
+  register_report({:params => [
                       ["processing_status", String, "Work Plan Status", {
                         optional: false,
                         validation: [
@@ -15,7 +12,7 @@ class WorkPlanDevelopmentReport < AbstractReport
                     ]
                   })
 
-  def initialize(params, job)
+  def initialize(params, job, db)
     super
     @processing_status = params['processing_status'] != "" ? params['processing_status'] : nil
   end
@@ -89,7 +86,7 @@ class WorkPlanDevelopmentReport < AbstractReport
     dataset
   end
 
-  def query(db)
+  def query
 
     # save a bunch of joins by caching the ids for event_types
     event_types = {}

@@ -1,10 +1,6 @@
 class AccValuationRequiredReport < AbstractAccValuationReport
 
-  register_report({
-                    :uri_suffix => "nla_valuation_required",
-                    :description => "Report on accessions where valuations are required"
-                  })
-
+  register_report
 
   VALUATION_STATUS_REQUIRED = 'Valuation Required'
 
@@ -13,7 +9,7 @@ class AccValuationRequiredReport < AbstractAccValuationReport
     "Accessions - Valuation Required"
   end
 
-  def query(db)
+  def query
     dataset = super
 
     dataset.where(Sequel.qualify(:enumvals_valuation_status, :value) => VALUATION_STATUS_REQUIRED)
