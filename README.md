@@ -1,6 +1,8 @@
 NLA Accession Reports plugin
 ============================
 
+An ArchivesSpace (v2.1.x) plugin developed for the National Library of Australia by Hudson Molonglo Pty Ltd.
+
 Introduces extra Accession reports, including:
  - Valuations Required
  - Valuations Completed
