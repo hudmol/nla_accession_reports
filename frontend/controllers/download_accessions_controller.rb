@@ -3,7 +3,7 @@ class DownloadAccessionsController < ApplicationController
   set_access_control  "view_repository" => [:download]
 
   def download
-    download_params = params_for_backend_search.merge('aq' => params['aq'])
+    download_params = params_for_backend_search.merge('aq' => params['aq'], 'type[]' => 'accession')
 
     # things changed in v2.0.0
     build_filters(download_params) unless ASConstants.VERSION.start_with?('v1')
