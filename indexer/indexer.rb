@@ -1,4 +1,4 @@
-class CommonIndexer
+class IndexerCommon
 
   add_indexer_initialize_hook do |indexer|
 
