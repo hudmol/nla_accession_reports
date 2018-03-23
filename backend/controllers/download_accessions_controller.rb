@@ -25,7 +25,7 @@ class ArchivesSpaceService < Sinatra::Base
 
   def content
     params[:filter_term] ||= []
-    params[:filter_term] << {'primary_type' => 'accession'}.to_json
+    params[:type] = 'accession'
     params[:page] = 1
     params[:page_size] = 100
 
@@ -34,7 +34,6 @@ class ArchivesSpaceService < Sinatra::Base
 
       while true
         resp = Search.search(params, params[:repo_id])
-
         resp['results'].each do |r|
           j = ASUtils.json_parse(r['json'])
           ud = j['user_defined'] || {}
