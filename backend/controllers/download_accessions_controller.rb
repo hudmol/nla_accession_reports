@@ -25,7 +25,7 @@ class ArchivesSpaceService < Sinatra::Base
 
   def content
     params[:filter_term] ||= []
-    params[:filter_term] << {'primary_type' => 'accession'}.to_json
+    params[:type] = 'accession'
     params[:page] = 1
     params[:page_size] = 100
 
@@ -34,11 +34,11 @@ class ArchivesSpaceService < Sinatra::Base
 
       while true
         resp = Search.search(params, params[:repo_id])
-
         resp['results'].each do |r|
           j = ASUtils.json_parse(r['json'])
           ud = j['user_defined'] || {}
           cm = j['collection_management'] || {}
+          j['extents'] = {} unless j['extents']
           extent1 = j['extents'][0] || {}
           extent2 = j['extents'][1] || {}
           csv << [
@@ -51,7 +51,7 @@ class ArchivesSpaceService < Sinatra::Base
                   j['access_restrictions_note'],
                   j['disposition'],
                   j['acquisition_type'],
-                  format_dates(j['dates']),
+                  format_dates(j['dates'] || {}),
                   extent1['number'],
                   extent1['extent_type'],
                   extent1['container_summary'],
@@ -62,7 +62,7 @@ class ArchivesSpaceService < Sinatra::Base
                   extent2['container_summary'],
                   extent2['physical_details'],
                   extent2['dimensions'],
-                  format_subjects(r['subjects']),
+                  format_subjects(r['subjects'] || []),
                   ud['text_2'],
                   ud['text_3'],
                   ud['text_4'],
