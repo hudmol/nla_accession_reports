@@ -1,10 +1,10 @@
 class ArchivesSpaceService < Sinatra::Base
 
-  include ReportHelper
+  include ReportManager
 
   # Endpoint.get("/repositories/:repo_id/reports/nla_valuation_required")
   # .description("Report on accessions where valuations are required")
-  # .params(ReportHelper.report_formats,
+  # .params(ReportManager.allowed_report_formats,
   #         ["repo_id", :repo_id])
   # .permissions([])
   # .returns([200, "report"]) \
@@ -15,7 +15,7 @@ class ArchivesSpaceService < Sinatra::Base
   #
   # Endpoint.get("/repositories/:repo_id/reports/nla_valuation_completed")
   # .description("Report on accessions where valuations are completed")
-  # .params(ReportHelper.report_formats,
+  # .params(ReportManager.allowed_report_formats,
   #         ["repo_id", :repo_id])
   # .permissions([])
   # .returns([200, "report"]) \
@@ -26,7 +26,7 @@ class ArchivesSpaceService < Sinatra::Base
   #
   # Endpoint.get("/repositories/:repo_id/reports/nla_work_plan_development")
   # .description("Work Plan Development report")
-  # .params(ReportHelper.report_formats,
+  # .params(ReportManager.allowed_report_formats,
   #         ["repo_id", :repo_id])
   # .permissions([])
   # .returns([200, "report"]) \
@@ -39,7 +39,7 @@ class ArchivesSpaceService < Sinatra::Base
 
     Endpoint.get("/repositories/:repo_id/reports/#{uri_suffix}")
     .description(opts[:description])
-    .params(*(opts[:params] << ReportHelper.report_formats << ["repo_id", :repo_id]))
+    .params(*(opts[:params] << ReportManager.allowed_report_formats << ["repo_id", :repo_id]))
     .permissions([])
     .returns([200, "report"]) \
     do
