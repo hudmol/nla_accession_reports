@@ -58,31 +58,30 @@ class DownloadAccessionsController < ApplicationController
   def build_filters(criteria)
     queries = AdvancedQueryBuilder.new
 
-    Array(criteria['filter_term[]']).each do |json_filter|
-      filter = ASUtils.json_parse(json_filter)
-      queries.and(filter.keys[0], filter.values[0])
+    if criteria['filter_term[]']
+      Array(criteria['filter_term[]']).each do |json_filter|
+        filter = ASUtils.json_parse(json_filter)
+        queries.and(filter.keys[0], filter.values[0])
+      end
+
+      new_filter = queries.build
+
+      if criteria['filter']
+        # Combine our new filter with any existing ones
+        existing_filter = ASUtils.json_parse(criteria['filter'])
+
+        new_filter['query'] = JSONModel(:boolean_query)
+                                .from_hash({
+                                             :jsonmodel_type => 'boolean_query',
+                                             :op => 'AND',
+                                             :subqueries => [existing_filter['query'], new_filter['query']]
+                                           })
+
+      end
+
+      criteria['filter'] = new_filter.to_json
     end
-
-    # The staff interface shouldn't show records that were only created for the
-    # Public User Interface.
-    queries.and('types', 'pui_only', 'text', literal = true, negated = true)
-
-    new_filter = queries.build
-
-    if criteria['filter']
-      # Combine our new filter with any existing ones
-      existing_filter = ASUtils.json_parse(criteria['filter'])
-
-      new_filter['query'] = JSONModel(:boolean_query)
-        .from_hash({
-                                           :jsonmodel_type => 'boolean_query',
-                                           :op => 'AND',
-                                           :subqueries => [existing_filter['query'], new_filter['query']]
-                   })
-
-    end
-
-    criteria['filter'] = new_filter.to_json
+    criteria['filter']
   end
 
 end
